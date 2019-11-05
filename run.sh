@@ -59,7 +59,7 @@ prepare_docker_webcam_host_sharing() {
 prepare_docker_gpu_host_sharing() {
   # GPU support (Direct Rendering Manager)
   # Only available if non propietry drivers used
-  [ -c /dev/dri ] && DEVICES+=" --device /dev/dri"
+  [ -d /dev/dri ] && DEVICES+=" --device /dev/dri"
 }
 
 prepare_docker_printer_host_sharing() {
