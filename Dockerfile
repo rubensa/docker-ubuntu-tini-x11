@@ -11,10 +11,10 @@ RUN apt-get update \
     && apt-get -y install libglib2.0-bin pulseaudio-utils cups-client x11-utils \
     #
     # Assign audio group to non-root user
-    && usermod -a -G audio ${USER} \
+    && usermod -a -G audio ${USER_NAME} \
     #
     # Assign video group to non-root user
-    && usermod -a -G video ${USER} \
+    && usermod -a -G video ${USER_NAME} \
     #
     # Clean up
     && apt-get autoremove -y \

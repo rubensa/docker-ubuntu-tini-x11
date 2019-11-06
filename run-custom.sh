@@ -4,8 +4,10 @@
 USER_ID=$(id -u)
 # Get current user main GUID
 GROUP_ID=$(id -g)
+# Host docker group
+DOCKER_GROUP_NAME=docker
 # Host docker group GID
-DOCKER_GROUP_ID=$(getent group $DOCKER_GROUP | cut -d: -f3)
+DOCKER_GROUP_ID=$(getent group $DOCKER_GROUP_NAME | cut -d: -f3)
 
 prepare_docker_timezone() {
   # https://www.waysquare.com/how-to-change-docker-timezone/
