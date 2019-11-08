@@ -12,10 +12,7 @@ prepare_docker_timezone() {
 }
 
 prepare_docker_user_and_group() {
-  # On run, if you specify USER_ID or GROUP_ID environment variables the system change internal user UID and group GID to that provided.
-  # This also changes file ownership for those under /home/$USER/ owned by build-time UID and GUID.
-  ENV_VARS+=" --env=USER_ID=$USER_ID"
-  ENV_VARS+=" --env=GROUP_ID=$GROUP_ID"
+  RUNNER+=" --user=${USER_ID}:${GROUP_ID}"
 }
 
 prepare_docker_dbus_host_sharing() {
@@ -59,7 +56,7 @@ prepare_docker_webcam_host_sharing() {
 prepare_docker_gpu_host_sharing() {
   # GPU support (Direct Rendering Manager)
   # Only available if non propietry drivers used
-  [ -d /dev/dri ] && DEVICES+=" --device /dev/dri"
+  [ -c /dev/dri ] && DEVICES+=" --device /dev/dri"
 }
 
 prepare_docker_printer_host_sharing() {
@@ -100,4 +97,5 @@ docker run --rm -it \
   ${DEVICES} \
   ${MOUNTS} \
   ${EXTRA} \
+  ${RUNNER} \
   rubensa/ubuntu-tini-x11
