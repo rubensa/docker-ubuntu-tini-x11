@@ -63,6 +63,7 @@ prepare_docker_sound_host_sharing() {
   MOUNTS+=" --mount type=bind,source=${XDG_RUNTIME_DIR}/pulse,target=${XDG_RUNTIME_DIR}/pulse,readonly"
   # https://github.com/TheBiggerGuy/docker-pulseaudio-example/issues/1
   ENV_VARS+=" --env=PULSE_SERVER=unix:${XDG_RUNTIME_DIR}/pulse/native"
+  RUNNER_GROUPS+=" --group-add audio"
 }
 
 prepare_docker_webcam_host_sharing() {
@@ -73,6 +74,7 @@ prepare_docker_webcam_host_sharing() {
       DEVICES+=" --device $device"
     fi
   done
+  RUNNER_GROUPS+=" --group-add video"
 }
 
 prepare_docker_gpu_host_sharing() {
@@ -120,6 +122,7 @@ docker run --rm -it \
   ${MOUNTS} \
   ${EXTRA} \
   ${RUNNER} \
+  ${RUNNER_GROUPS} \
   rubensa/ubuntu-tini-x11
 ```
 
