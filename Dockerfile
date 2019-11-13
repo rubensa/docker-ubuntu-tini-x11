@@ -14,7 +14,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
     # 
     # Install software and needed libraries
-    && apt-get -y install libglib2.0-bin pulseaudio-utils cups-client x11-utils \
+    && apt-get -y install module-init-tools libglib2.0-bin pulseaudio-utils cups-client x11-utils \
     #
     # Assign audio group to non-root user
     && usermod -a -G audio ${USER_NAME} \
