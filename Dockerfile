@@ -1,6 +1,9 @@
 FROM rubensa/ubuntu-tini-dev
 LABEL author="Ruben Suarez <rubensa@gmail.com>"
 
+# If defined, install specified NVIDIA driver version
+ARG NVIDIA_VERSION
+
 # Tell docker that all future commands should be run as root
 USER root
 
@@ -14,13 +17,22 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
     # 
     # Install software and needed libraries
-    && apt-get -y install module-init-tools libglib2.0-bin pulseaudio-utils cups-client x11-utils \
+    && apt-get -y install module-init-tools libglib2.0-bin pulseaudio-utils cups-client x11-utils mesa-utils mesa-utils-extra va-driver-all \
     #
     # Assign audio group to non-root user
     && usermod -a -G audio ${USER_NAME} \
     #
     # Assign video group to non-root user
     && usermod -a -G video ${USER_NAME} \
+    #
+    # Install NVIDIA drivers
+    && if [ ! -z ${NVIDIA_VERSION} ] ; \
+      then \
+      curl -O http://us.download.nvidia.com/XFree86/Linux-x86_64/${NVIDIA_VERSION}/NVIDIA-Linux-x86_64-${NVIDIA_VERSION}.run; \
+      chmod +x NVIDIA-Linux-x86_64-${NVIDIA_VERSION}.run; \
+      ./NVIDIA-Linux-x86_64-${NVIDIA_VERSION}.run --ui=none --no-kernel-module --no-install-compat32-libs --install-libglvnd --no-questions; \
+      rm NVIDIA-Linux-x86_64-${NVIDIA_VERSION}.run; \
+    fi \
     #
     # Clean up
     && apt-get autoremove -y \

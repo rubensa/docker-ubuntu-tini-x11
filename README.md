@@ -15,6 +15,28 @@ docker build --no-cache \
   .
 ```
 
+To make an Nvidia GPU available in the docker container, the following steps have to be taken:
+
+```
+#!/usr/bin/env bash
+
+# NVidia propietary drivers are needed on host for this to work
+NVIDIA_VERSION=$(nvidia-smi --query-gpu=driver_version --format=csv,noheader)
+
+prepare_docker_nvidia_drivers_version() {
+  # On build, if you specify NVIDIA_VERSION the nvidia specified drivers version are installed
+  BUILD_ARGS+=" --build-arg NVIDIA_VERSION=$NVIDIA_VERSION"
+}
+
+prepare_docker_nvidia_drivers_version
+
+docker build --no-cache \
+  -t "rubensa/ubuntu-tini-x11" \
+  --label "maintainer=Ruben Suarez <rubensa@gmail.com>" \
+  ${BUILD_ARGS} \
+  .
+```
+
 ## Running
 
 You can run the container like this (change --rm with -d if you don't want the container to be removed on stop):
@@ -80,6 +102,15 @@ prepare_docker_webcam_host_sharing() {
 prepare_docker_gpu_host_sharing() {
   # GPU support (Direct Rendering Manager)
   [ -d /dev/dri ] && DEVICES+=" --device /dev/dri"
+  # VGA Arbiter
+  [ -c /dev/vga_arbiter ] && DEVICES+=" --device /dev/vga_arbiter"
+  # Allow nvidia devices access
+  for device in /dev/nvidia*
+  do
+    if [[ -c $device ]]; then
+      DEVICES+=" --device $device"
+    fi
+  done
 }
 
 prepare_docker_printer_host_sharing() {
@@ -130,25 +161,6 @@ docker run --rm -it \
 This way, the internal user UID an group GID are changed to the current host user:group launching the container and the existing files under his internal HOME directory that where owned by user and group are also updated to belong to the new UID:GID.
 
 Functions prepare_docker_dbus_host_sharing, prepare_docker_xdg_runtime_dir_host_sharing, prepare_docker_sound_host_sharing, prepare_docker_webcam_host_sharing, prepare_docker_gpu_host_sharing, prepare_docker_printer_host_sharing, prepare_docker_x11_host_sharing and prepare_docker_hostname_host_sharing allows sharing your host resources with the running container as GUI apps can interact with your host system as they where installed in the host.
-
-## Setup GPU
-
-To make an Nvidia GPU available in the docker container, the following steps have to be taken:
-
-On the host, check your driver version:
-
-    # you might have to install this package:
-    $ sudo apt-get install mesa-utils
-    $ glxinfo |grep "OpenGL version"
-    OpenGL version string: 4.6.0 NVIDIA 390.129
-
-In this example, the driver version is "390.129". Now, you have install exactly the same driver in the container:
-
-    export VERSION=390.129
-    wget http://us.download.nvidia.com/XFree86/Linux-x86_64/$VERSION/NVIDIA-Linux-x86_64-$VERSION.run
-    chmod +x NVIDIA-Linux-x86_64-$VERSION.run
-    apt-get install -y module-init-tools
-    ./NVIDIA-Linux-x86_64-$VERSION.run -a -N --ui=none --no-kernel-module
 
 ## Connect
 
@@ -201,6 +213,11 @@ You can check X11 running command:
 
 ```
 xmessage 'Hello, World!'
+```
+
+Your can chedk GPU acceleration is working running command:
+```
+glxgears
 ```
 
 ## Stop

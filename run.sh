@@ -58,6 +58,15 @@ prepare_docker_webcam_host_sharing() {
 prepare_docker_gpu_host_sharing() {
   # GPU support (Direct Rendering Manager)
   [ -d /dev/dri ] && DEVICES+=" --device /dev/dri"
+  # VGA Arbiter
+  [ -c /dev/vga_arbiter ] && DEVICES+=" --device /dev/vga_arbiter"
+  # Allow nvidia devices access
+  for device in /dev/nvidia*
+  do
+    if [[ -c $device ]]; then
+      DEVICES+=" --device $device"
+    fi
+  done
 }
 
 prepare_docker_printer_host_sharing() {
