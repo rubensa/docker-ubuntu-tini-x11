@@ -51,8 +51,7 @@ GROUP_ID=$(id -g)
 
 prepare_docker_timezone() {
   # https://www.waysquare.com/how-to-change-docker-timezone/
-  MOUNTS+=" --mount type=bind,source=/etc/timezone,target=/etc/timezone,readonly"
-  MOUNTS+=" --mount type=bind,source=/etc/localtime,target=/etc/localtime,readonly"
+  ENV_VARS+=" --env=TZ=$(cat /etc/timezone)"
 }
 
 prepare_docker_user_and_group() {
