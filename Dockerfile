@@ -10,6 +10,9 @@ USER root
 # Set root home directory
 ENV HOME=/root
 
+# Add script to allow nvidia drivers installation
+ADD install-nvidia-drivers.sh /usr/bin/install-nvidia-drivers.sh
+
 # Avoid warnings by switching to noninteractive
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -34,6 +37,12 @@ RUN apt-get update \
       rm NVIDIA-Linux-x86_64-${NVIDIA_VERSION}.run; \
     fi \
     #
+    # Enable runtime nvidia drivers installation
+    && chmod +x /usr/bin/install-nvidia-drivers.sh \
+    #
+    # Configure nvidia drivers installation for the non-root user
+    && printf "\n. /usr/bin/install-nvidia-drivers.sh\n" >> /home/${USER_NAME}/.bashrc \
+    #
     # Clean up
     && apt-get autoremove -y \
     && apt-get clean -y \
@@ -47,3 +56,5 @@ USER ${USER_NAME}
 
 # Set user home directory (see: https://github.com/microsoft/vscode-remote-release/issues/852)
 ENV HOME /home/$USER_NAME
+
+

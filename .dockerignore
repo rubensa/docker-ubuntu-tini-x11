@@ -1,2 +1,5 @@
 # Ignore everything
 **
+
+# Exceptions
+!install-nvidia-drivers.sh
