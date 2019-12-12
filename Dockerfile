@@ -10,6 +10,9 @@ USER root
 # Set root home directory
 ENV HOME=/root
 
+# DBUS_SESSION_BUS_ADDRESS is lost with sudo (https://github.com/SeleniumHQ/docker-selenium/issues/358)
+RUN printf "\nDefaults env_keep += \"DBUS_SESSION_BUS_ADDRESS\"\n" >> /etc/sudoers
+
 # Add script to allow nvidia drivers installation
 ADD install-nvidia-drivers.sh /usr/bin/install-nvidia-drivers.sh
 

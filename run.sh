@@ -23,7 +23,8 @@ prepare_docker_dbus_host_sharing() {
   # System DBus
   MOUNTS+=" --mount type=bind,source=/run/dbus/system_bus_socket,target=/run/dbus/system_bus_socket"
   # User DBus unix socket
-  ENV_VARS+=" --env=DBUS_SESSION_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS"
+  # Prevent "gio:" "operation not supported" when running "xdg-open https://rubensa.eu.org"
+  ENV_VARS+=" --env=DBUS_SESSION_BUS_ADDRESS=/dev/null"
 }
 
 prepare_docker_xdg_runtime_dir_host_sharing() {
