@@ -75,6 +75,11 @@ prepare_docker_printer_host_sharing() {
   ENV_VARS+=" --env CUPS_SERVER=/run/cups/cups.sock"
 }
 
+prepare_docker_ipc_host_sharing() {
+  # Allow shared memory to avoid RAM access failures and rendering glitches due to X extesnion MIT-SHM
+  EXTRA+=" --ipc=host"
+}
+
 prepare_docker_x11_host_sharing() {
    # X11 Unix-domain socket
   MOUNTS+=" --mount type=bind,source=/tmp/.X11-unix,target=/tmp/.X11-unix"
@@ -107,6 +112,7 @@ prepare_docker_sound_host_sharing
 prepare_docker_webcam_host_sharing
 prepare_docker_gpu_host_sharing
 prepare_docker_printer_host_sharing
+prepare_docker_ipc_host_sharing
 prepare_docker_x11_host_sharing
 prepare_docker_hostname_host_sharing
 prepare_docker_nvidia_drivers_install
