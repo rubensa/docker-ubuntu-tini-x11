@@ -23,7 +23,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
     # 
     # Install software and needed libraries
-    && apt-get -y install kmod libglib2.0-bin pulseaudio-utils cups-client x11-utils mesa-utils mesa-utils-extra va-driver-all \
+    && apt-get -y install --no-install-recommends kmod libglib2.0-bin pulseaudio-utils cups-client x11-utils mesa-utils mesa-utils-extra va-driver-all 2>&1 \
     #
     # Assign audio group to non-root user
     && usermod -a -G audio ${USER_NAME} \
