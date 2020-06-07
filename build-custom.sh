@@ -11,7 +11,7 @@ prepare_docker_nvidia_drivers_version() {
 prepare_docker_nvidia_drivers_version
 
 docker build --no-cache \
-  -t "rubensa/ubuntu-tini-x11" \
+  -t "rubensa/ubuntu-tini-x11:18.04" \
   --label "maintainer=Ruben Suarez <rubensa@gmail.com>" \
   ${BUILD_ARGS} \
   .

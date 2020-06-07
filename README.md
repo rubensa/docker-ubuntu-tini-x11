@@ -1,4 +1,4 @@
-# Docker image based on rubensa/ubuntu-tini-dev for running GUI apps
+# Docker image based on rubensa/ubuntu-tini-dev 18.04 for running GUI apps
 
 This is a Docker image based on [rubensa/ubuntu-tini-dev](https://github.com/rubensa/docker-ubuntu-tini-dev) useful for launching X11 GUI applications.
 
@@ -10,7 +10,7 @@ You can build the image like this:
 #!/usr/bin/env bash
 
 docker build --no-cache \
-  -t "rubensa/ubuntu-tini-x11" \
+  -t "rubensa/ubuntu-tini-x11:18.04" \
   --label "maintainer=Ruben Suarez <rubensa@gmail.com>" \
   .
 ```
@@ -31,7 +31,7 @@ prepare_docker_nvidia_drivers_version() {
 prepare_docker_nvidia_drivers_version
 
 docker build --no-cache \
-  -t "rubensa/ubuntu-tini-x11" \
+  -t "rubensa/ubuntu-tini-x11:18.04" \
   --label "maintainer=Ruben Suarez <rubensa@gmail.com>" \
   ${BUILD_ARGS} \
   .
@@ -170,7 +170,7 @@ docker run --rm -it \
   ${EXTRA} \
   ${RUNNER} \
   ${RUNNER_GROUPS} \
-  rubensa/ubuntu-tini-x11
+  rubensa/ubuntu-tini-x11:18.04
 ```
 
 *NOTE*: Mounting /etc/timezone and /etc/localtime allows you to use your host timezone on container.
