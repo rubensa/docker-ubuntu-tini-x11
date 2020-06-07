@@ -126,4 +126,4 @@ docker run --rm -it \
   ${EXTRA} \
   ${RUNNER} \
   ${RUNNER_GROUPS} \
-  rubensa/ubuntu-tini-x11
+  rubensa/ubuntu-tini-x11:20.04
