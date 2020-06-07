@@ -2,7 +2,7 @@
 
 DOCKER_REPOSITORY_NAME="rubensa"
 DOCKER_IMAGE_NAME="ubuntu-tini-x11"
-DOCKER_IMAGE_TAG="latest"
+DOCKER_IMAGE_TAG="18.04"
 
 # NVidia propietary drivers are needed on host for this to work
 NVIDIA_VERSION=$(nvidia-smi --query-gpu=driver_version --format=csv,noheader)
