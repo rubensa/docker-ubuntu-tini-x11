@@ -34,7 +34,7 @@ RUN apt-get update \
     # Install NVIDIA drivers
     && if [ ! -z ${NVIDIA_VERSION} ] ; \
       then \
-      curl -O http://us.download.nvidia.com/XFree86/Linux-x86_64/${NVIDIA_VERSION}/NVIDIA-Linux-x86_64-${NVIDIA_VERSION}.run; \
+      curl -sSLO http://us.download.nvidia.com/XFree86/Linux-x86_64/${NVIDIA_VERSION}/NVIDIA-Linux-x86_64-${NVIDIA_VERSION}.run; \
       chmod +x NVIDIA-Linux-x86_64-${NVIDIA_VERSION}.run; \
       ./NVIDIA-Linux-x86_64-${NVIDIA_VERSION}.run --ui=none --no-kernel-module --no-install-compat32-libs --install-libglvnd --no-questions; \
       rm NVIDIA-Linux-x86_64-${NVIDIA_VERSION}.run; \
@@ -62,48 +62,48 @@ RUN apt-get update \
     # Corbel (Bold, Italic, Bold Italic), Constantia (Bold, Italic, Bold Italic), Cambria (Bold, Italic, Bold Italic)
     # Cambria Math
     && mkdir -p /tmp/fonts \
-    && curl -L -o /tmp/fonts/PowerPointViewer.exe https://web.archive.org/web/20171225132744/http://download.microsoft.com/download/E/6/7/E675FFFC-2A6D-4AB0-B3EB-27C9F8C8F696/PowerPointViewer.exe \
+    && curl -o /tmp/fonts/PowerPointViewer.exe -sSL https://web.archive.org/web/20171225132744/http://download.microsoft.com/download/E/6/7/E675FFFC-2A6D-4AB0-B3EB-27C9F8C8F696/PowerPointViewer.exe \
     && cabextract -F ppviewer.cab /tmp/fonts/PowerPointViewer.exe -d /tmp/fonts \
     && cabextract -L -F '*.tt?' /tmp/fonts/ppviewer.cab -d /tmp/fonts \
     && fontforge -lang=ff -c 'Open("/tmp/fonts/cambria.ttc(Cambria)"); Generate("/tmp/fonts/cambria.ttf"); Close(); Open("/tmp/fonts/cambria.ttc(Cambria Math)"); Generate("/tmp/fonts/cambriamath.ttf"); Close();' \
     # Microsoft Tahoma
     && mkdir -p /tmp/fonts \
-    && curl -L -o /tmp/fonts/IELPKTH.CAB https://master.dl.sourceforge.net/project/corefonts/OldFiles/IELPKTH.CAB \
+    && curl -o /tmp/fonts/IELPKTH.CAB -sSL https://master.dl.sourceforge.net/project/corefonts/OldFiles/IELPKTH.CAB \
     && cabextract -F 'tahoma*ttf' /tmp/fonts/IELPKTH.CAB -d /tmp/fonts \
     # Wine Tahoma
     && mkdir -p /tmp/fonts \
-    && curl -L -o /tmp/fonts/tahoma.ttf http://source.winehq.org/source/fonts/tahoma.ttf?_raw=1 \
-    && curl -L -o /tmp/fonts/tahomabd.ttf http://source.winehq.org/source/fonts/tahomabd.ttf?_raw=1 \
+    && curl -o /tmp/fonts/tahoma.ttf -sSL http://source.winehq.org/source/fonts/tahoma.ttf?_raw=1 \
+    && curl -o /tmp/fonts/tahomabd.ttf -sSL http://source.winehq.org/source/fonts/tahomabd.ttf?_raw=1 \
     #
     # Segoe UI
     # regular
-    && curl -L -o /tmp/fonts/segoeui.ttf https://github.com/rubensa/clide/blob/master/doc/fonts/segoeui.ttf?raw=true \
+    && curl -o /tmp/fonts/segoeui.ttf -sSL https://github.com/rubensa/clide/blob/master/doc/fonts/segoeui.ttf?raw=true \
     # bold
-    && curl -L -o /tmp/fonts/segoeuib.ttf https://github.com/rubensa/clide/blob/master/doc/fonts/segoeuib.ttf?raw=true \
+    && curl -o /tmp/fonts/segoeuib.ttf -sSL https://github.com/rubensa/clide/blob/master/doc/fonts/segoeuib.ttf?raw=true \
     # italic
-    && curl -L -o /tmp/fonts/segoeuii.ttf https://github.com/rubensa/clide/blob/master/doc/fonts/segoeuib.ttf?raw=true \
+    && curl -o /tmp/fonts/segoeuii.ttf -sSL https://github.com/rubensa/clide/blob/master/doc/fonts/segoeuib.ttf?raw=true \
     # bold italic
-    && curl -L -o /tmp/fonts/segoeuiz.ttf https://github.com/rubensa/clide/blob/master/doc/fonts/segoeuiz.ttf?raw=true \
+    && curl -o /tmp/fonts/segoeuiz.ttf -sSL https://github.com/rubensa/clide/blob/master/doc/fonts/segoeuiz.ttf?raw=true \
     # light
-    && curl -L -o /tmp/fonts/segoeuil.ttf https://github.com/rubensa/clide/blob/master/doc/fonts/segoeuil.ttf?raw=true \
+    && curl -o /tmp/fonts/segoeuil.ttf -sSL https://github.com/rubensa/clide/blob/master/doc/fonts/segoeuil.ttf?raw=true \
     # light italic
-    && curl -L -o /tmp/fonts/seguili.ttf https://github.com/rubensa/clide/blob/master/doc/fonts/seguili.ttf?raw=true \
+    && curl -o /tmp/fonts/seguili.ttf -sSL https://github.com/rubensa/clide/blob/master/doc/fonts/seguili.ttf?raw=true \
     # semilight
-    && curl -L -o /tmp/fonts/segoeuisl.ttf https://github.com/rubensa/clide/blob/master/doc/fonts/segoeuisl.ttf?raw=true \
+    && curl -o /tmp/fonts/segoeuisl.ttf -sSL https://github.com/rubensa/clide/blob/master/doc/fonts/segoeuisl.ttf?raw=true \
     # semilight italic
-    && curl -L -o /tmp/fonts/seguisli.ttf https://github.com/rubensa/clide/blob/master/doc/fonts/seguisli.ttf?raw=true \
+    && curl -o /tmp/fonts/seguisli.ttf -sSL https://github.com/rubensa/clide/blob/master/doc/fonts/seguisli.ttf?raw=true \
     # semibold
-    && curl -L -o /tmp/fonts/seguisb.ttf https://github.com/rubensa/clide/blob/master/doc/fonts/seguisb.ttf?raw=true \
+    && curl -o /tmp/fonts/seguisb.ttf -sSL https://github.com/rubensa/clide/blob/master/doc/fonts/seguisb.ttf?raw=true \
     # semibold italic
-    && curl -L -o /tmp/fonts/seguisbi.ttf https://github.com/rubensa/clide/blob/master/doc/fonts/seguisbi.ttf?raw=true \
+    && curl -o /tmp/fonts/seguisbi.ttf -sSL https://github.com/rubensa/clide/blob/master/doc/fonts/seguisbi.ttf?raw=true \
     #
     # WPS Office Fonts (Symbol fonts)
-    && curl -L -o /tmp/fonts/WEBDINGS.TTF https://github.com/rubensa/ttf-wps-fonts/raw/master/WEBDINGS.TTF \
-    && curl -L -o /tmp/fonts/WINGDNG2.ttf https://github.com/rubensa/ttf-wps-fonts/raw/master/WINGDNG2.ttf \
-    && curl -L -o /tmp/fonts/WINGDNG3.ttf https://github.com/rubensa/ttf-wps-fonts/raw/master/WINGDNG3.ttf \
-    && curl -L -o /tmp/fonts/mtextra.ttf https://github.com/rubensa/ttf-wps-fonts/raw/master/mtextra.ttf \
-    && curl -L -o /tmp/fonts/symbol.ttf https://github.com/rubensa/ttf-wps-fonts/raw/master/symbol.ttf \
-    && curl -L -o /tmp/fonts/wingding.ttf https://github.com/rubensa/ttf-wps-fonts/raw/master/wingding.ttf \
+    && curl -o /tmp/fonts/WEBDINGS.TTF -sSL https://github.com/rubensa/ttf-wps-fonts/raw/master/WEBDINGS.TTF \
+    && curl -o /tmp/fonts/WINGDNG2.ttf -sSL https://github.com/rubensa/ttf-wps-fonts/raw/master/WINGDNG2.ttf \
+    && curl -o /tmp/fonts/WINGDNG3.ttf -sSL https://github.com/rubensa/ttf-wps-fonts/raw/master/WINGDNG3.ttf \
+    && curl -o /tmp/fonts/mtextra.ttf -sSL https://github.com/rubensa/ttf-wps-fonts/raw/master/mtextra.ttf \
+    && curl -o /tmp/fonts/symbol.ttf -sSL https://github.com/rubensa/ttf-wps-fonts/raw/master/symbol.ttf \
+    && curl -o /tmp/fonts/wingding.ttf -sSL https://github.com/rubensa/ttf-wps-fonts/raw/master/wingding.ttf \
     #
     && mkdir -p /usr/share/fonts/truetype/msttcorefonts/ \
     && cp -f /tmp/fonts/*.ttf /usr/share/fonts/truetype/msttcorefonts \
