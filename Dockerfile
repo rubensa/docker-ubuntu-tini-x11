@@ -13,6 +13,10 @@ ENV HOME=/root
 # DBUS_SESSION_BUS_ADDRESS is lost with sudo (https://github.com/SeleniumHQ/docker-selenium/issues/358)
 RUN printf "\nDefaults env_keep += \"DBUS_SESSION_BUS_ADDRESS\"\n" >> /etc/sudoers
 
+# suppress GTK warnings about accessibility
+# (WARNING **: Couldn't connect to accessibility bus: Failed to connect to socket /tmp/dbus-dw0fOAy4vj: Connection refused)
+ENV NO_AT_BRIDGE 1
+
 # Avoid warnings by switching to noninteractive
 ENV DEBIAN_FRONTEND=noninteractive
 
