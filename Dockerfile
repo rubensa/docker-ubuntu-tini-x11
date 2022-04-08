@@ -23,11 +23,15 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Configure apt
 RUN apt-get update
 
+# Install Google Noto font family
+RUN echo "# Installing Google Noto font family..." \
+    && apt-get -y install fonts-noto 2>&1
+
 # Install software and libraries needed to share X11 between host and container
 RUN echo "# Installing kmod, libglib2.0-bin, pulseaudio-utils, cups-client, x11-utils, mesa-utils, mesa-utils-extra and va-driver-all..." \
     && apt-get -y install --no-install-recommends kmod libglib2.0-bin pulseaudio-utils cups-client x11-utils mesa-utils mesa-utils-extra va-driver-all 2>&1
 
-# Configure apt and install packages
+# Configure user (add to audio and video groups)
 RUN echo "# Configuring '${USER_NAME}' for X11 functionallity..." \
     #
     # Assign audio group to non-root user
