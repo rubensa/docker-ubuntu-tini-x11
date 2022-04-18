@@ -58,6 +58,10 @@ prepare_docker_user_and_group() {
   RUNNER+=" --user=${USER_ID}:${GROUP_ID}"
 }
 
+prepare_docker_from_docker() {
+    MOUNTS+=" --mount type=bind,source=/var/run/docker.sock,target=/var/run/docker-host.sock"
+}
+
 prepare_docker_dbus_host_sharing() {
   # To access DBus you ned to start a container without an AppArmor profile
   SECURITY+=" --security-opt apparmor:unconfined"
@@ -150,6 +154,7 @@ prepare_docker_nvidia_drivers_install() {
 
 prepare_docker_timezone
 prepare_docker_user_and_group
+prepare_docker_from_docker
 prepare_docker_dbus_host_sharing
 prepare_docker_xdg_runtime_dir_host_sharing
 prepare_docker_sound_host_sharing
@@ -173,7 +178,7 @@ docker run --rm -it \
   rubensa/ubuntu-tini-x11
 ```
 
-*NOTE*: Mounting /etc/timezone and /etc/localtime allows you to use your host timezone on container.
+*NOTE*: Mounting /var/run/docker.sock allows host docker usage inside the container (docker-from-docker).
 
 This way, the internal user UID an group GID are changed to the current host user:group launching the container and the existing files under his internal HOME directory that where owned by user and group are also updated to belong to the new UID:GID.
 

@@ -14,6 +14,10 @@ prepare_docker_user_and_group() {
   RUNNER+=" --user=${USER_ID}:${GROUP_ID}"
 }
 
+prepare_docker_from_docker() {
+    MOUNTS+=" --mount type=bind,source=/var/run/docker.sock,target=/var/run/docker-host.sock"
+}
+
 prepare_docker_dbus_host_sharing() {
   # To access DBus you ned to start a container without an AppArmor profile
   SECURITY+=" --security-opt apparmor:unconfined"
@@ -106,6 +110,7 @@ prepare_docker_nvidia_drivers_install() {
 
 prepare_docker_timezone
 prepare_docker_user_and_group
+prepare_docker_from_docker
 prepare_docker_dbus_host_sharing
 prepare_docker_xdg_runtime_dir_host_sharing
 prepare_docker_sound_host_sharing
@@ -127,3 +132,4 @@ docker run --rm -it \
   ${RUNNER} \
   ${RUNNER_GROUPS} \
   rubensa/ubuntu-tini-x11
+  
