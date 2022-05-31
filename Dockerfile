@@ -1,6 +1,9 @@
 FROM rubensa/ubuntu-tini-dev
 LABEL author="Ruben Suarez <rubensa@gmail.com>"
 
+# Architecture component of TARGETPLATFORM (platform of the build result)
+ARG TARGETARCH
+
 # If defined, install specified NVIDIA driver version
 ARG NVIDIA_VERSION
 
@@ -41,14 +44,14 @@ RUN echo "# Configuring '${USER_NAME}' for X11 functionallity..." \
     && usermod -a -G video ${USER_NAME}
 
 # Install NVIDIA drivers in the image if NVIDIA_VERSION arg set
-RUN if [ ! -z ${NVIDIA_VERSION} ] ; \
-      then \
-      echo "# Downloading NVIDIA drivers matching host version (${NVIDIA_VERSION})..."; \
-      curl -sSLO http://us.download.nvidia.com/XFree86/Linux-x86_64/${NVIDIA_VERSION}/NVIDIA-Linux-x86_64-${NVIDIA_VERSION}.run; \
-      chmod +x NVIDIA-Linux-x86_64-${NVIDIA_VERSION}.run; \
-      echo "# Installing NVIDIA drivers..."; \
-      ./NVIDIA-Linux-x86_64-${NVIDIA_VERSION}.run --ui=none --no-kernel-module --no-install-compat32-libs --install-libglvnd --no-questions; \
-      rm NVIDIA-Linux-x86_64-${NVIDIA_VERSION}.run; \
+RUN if [ ! -z ${NVIDIA_VERSION} ] ; then \
+        if [ "$TARGETARCH" = "arm64" ]; then TARGET=aarch64; elif [ "$TARGETARCH" = "amd64" ]; then TARGET=x86_64; else TARGET=$TARGETARCH; fi; \
+        echo "# Downloading NVIDIA drivers matching host version (${NVIDIA_VERSION})..."; \
+        curl -sSLO http://us.download.nvidia.com/XFree86/Linux-${TARGET}/${NVIDIA_VERSION}/NVIDIA-Linux-${TARGET}-${NVIDIA_VERSION}.run; \
+        chmod +x NVIDIA-Linux-${TARGET}-${NVIDIA_VERSION}.run; \
+        echo "# Installing NVIDIA drivers..."; \
+        ./NVIDIA-Linux-${TARGET}-${NVIDIA_VERSION}.run --ui=none --no-kernel-module --no-install-compat32-libs --install-libglvnd --no-questions; \
+        rm NVIDIA-Linux-${TARGET}-${NVIDIA_VERSION}.run; \
     fi
 
 # Add script to allow nvidia drivers installation on user interactive session
