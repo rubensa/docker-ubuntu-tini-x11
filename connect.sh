@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+DOCKER_IMAGE_NAME="ubuntu-tini-x11"
+
 docker exec -it \
-  ubuntu-tini-x11 \
+  "${DOCKER_IMAGE_NAME}" \
   bash -l

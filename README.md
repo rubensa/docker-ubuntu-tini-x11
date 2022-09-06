@@ -9,20 +9,28 @@ You can build the image like this:
 ```
 #!/usr/bin/env bash
 
+DOCKER_REPOSITORY_NAME="rubensa"
+DOCKER_IMAGE_NAME="ubuntu-tini-x11"
+DOCKER_IMAGE_TAG="latest"
+
 docker buildx build --platform=linux/amd64,linux/arm64 --no-cache \
-  -t "rubensa/ubuntu-tini-x11" \
+  -t "${DOCKER_REPOSITORY_NAME}/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}" \
   --label "maintainer=Ruben Suarez <rubensa@gmail.com>" \
   .
 
 docker buildx build --load \
-	-t "rubensa/ubuntu-tini-x11" \
-	.
+  -t "${DOCKER_REPOSITORY_NAME}/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}" \
+  .
 ```
 
 To make an Nvidia GPU available in the docker container, the following steps have to be taken:
 
 ```
 #!/usr/bin/env bash
+
+DOCKER_REPOSITORY_NAME="rubensa"
+DOCKER_IMAGE_NAME="ubuntu-tini-x11"
+DOCKER_IMAGE_TAG="latest"
 
 # NVidia propietary drivers are needed on host for this to work
 NVIDIA_VERSION=$(nvidia-smi --query-gpu=driver_version --format=csv,noheader)
@@ -34,10 +42,16 @@ prepare_docker_nvidia_drivers_version() {
 
 prepare_docker_nvidia_drivers_version
 
-docker build --no-cache \
-  -t "rubensa/ubuntu-tini-x11" \
+# see: https://github.com/docker/buildx/issues/495#issuecomment-761562905
+#docker buildx build --platform=linux/amd64,linux/arm64 --no-cache --progress=plain --pull \
+docker buildx build --platform=linux/amd64,linux/arm64 --no-cache \
+  -t "${DOCKER_REPOSITORY_NAME}/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}" \
   --label "maintainer=Ruben Suarez <rubensa@gmail.com>" \
   ${BUILD_ARGS} \
+  .
+
+docker buildx build --load \
+  -t "${DOCKER_REPOSITORY_NAME}/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}" \
   .
 ```
 
@@ -47,6 +61,10 @@ You can run the container like this (change --rm with -d if you don't want the c
 
 ```
 #!/usr/bin/env bash
+
+DOCKER_REPOSITORY_NAME="rubensa"
+DOCKER_IMAGE_NAME="ubuntu-tini-dev"
+DOCKER_IMAGE_TAG="latest"
 
 # Get current user UID
 USER_ID=$(id -u)
@@ -128,7 +146,7 @@ prepare_docker_printer_host_sharing() {
 }
 
 prepare_docker_ipc_host_sharing() {
-  # Allow shared memory to avoid RAM access failures and rendering glitches due to X extesnion MIT-SHM
+  # Allow shared memory to avoid RAM access failures and rendering glitches due to X extension MIT-SHM
   EXTRA+=" --ipc=host"
 }
 
@@ -171,7 +189,7 @@ prepare_docker_hostname_host_sharing
 prepare_docker_nvidia_drivers_install
 
 docker run --rm -it \
-  --name "ubuntu-tini-x11" \
+  --name "${DOCKER_IMAGE_NAME}" \
   ${SECURITY} \
   ${ENV_VARS} \
   ${DEVICES} \
@@ -179,7 +197,7 @@ docker run --rm -it \
   ${EXTRA} \
   ${RUNNER} \
   ${RUNNER_GROUPS} \
-  rubensa/ubuntu-tini-x11
+  "${DOCKER_REPOSITORY_NAME}/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}" "$@"
 ```
 
 *NOTE*: Mounting /var/run/docker.sock allows host docker usage inside the container (docker-from-docker).
@@ -197,8 +215,10 @@ You can connect to the running container like this:
 ```
 #!/usr/bin/env bash
 
+DOCKER_IMAGE_NAME="ubuntu-tini-x11"
+
 docker exec -it \
-  ubuntu-tini-x11 \
+  "${DOCKER_IMAGE_NAME}" \
   bash -l
 ```
 
@@ -255,8 +275,10 @@ You can stop the running container like this:
 ```
 #!/usr/bin/env bash
 
-docker stop \
-  ubuntu-tini-x11
+DOCKER_IMAGE_NAME="ubuntu-tini-x11"
+
+docker stop  \
+  "${DOCKER_IMAGE_NAME}"
 ```
 
 ## Start
@@ -266,8 +288,10 @@ If you run the container without --rm you can start it again like this:
 ```
 #!/usr/bin/env bash
 
+DOCKER_IMAGE_NAME="ubuntu-tini-x11"
+
 docker start \
-  ubuntu-tini-x11
+  "${DOCKER_IMAGE_NAME}"
 ```
 
 ## Remove
@@ -277,6 +301,8 @@ If you run the container without --rm you can remove once stopped like this:
 ```
 #!/usr/bin/env bash
 
+DOCKER_IMAGE_NAME="ubuntu-tini-x11"
+
 docker rm \
-  ubuntu-tini-x11
+  "${DOCKER_IMAGE_NAME}"
 ```

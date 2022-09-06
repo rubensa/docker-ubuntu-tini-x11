@@ -28,46 +28,46 @@ RUN apt-get update
 
 # Install Google Noto font family
 RUN echo "# Installing Google Noto font family..." \
-    && apt-get -y install fonts-noto 2>&1
+  && apt-get -y install fonts-noto 2>&1
 
 # Install software and libraries needed to share X11 between host and container
 RUN echo "# Installing kmod, libglib2.0-bin, libgl1-mesa-glx, libgl1-mesa-dri, pulseaudio-utils, cups-client, x11-utils, mesa-utils, mesa-utils-extra and va-driver-all..." \
-    && apt-get -y install --no-install-recommends kmod libglib2.0-bin libgl1-mesa-glx libgl1-mesa-dri pulseaudio-utils cups-client x11-utils mesa-utils mesa-utils-extra va-driver-all 2>&1
+  && apt-get -y install --no-install-recommends kmod libglib2.0-bin libgl1-mesa-glx libgl1-mesa-dri pulseaudio-utils cups-client x11-utils mesa-utils mesa-utils-extra va-driver-all 2>&1
 
 # Configure user (add to audio and video groups)
 RUN echo "# Configuring '${USER_NAME}' for X11 functionallity..." \
-    #
-    # Assign audio group to non-root user
-    && usermod -a -G audio ${USER_NAME} \
-    #
-    # Assign video group to non-root user
-    && usermod -a -G video ${USER_NAME}
+  #
+  # Assign audio group to non-root user
+  && usermod -a -G audio ${USER_NAME} \
+  #
+  # Assign video group to non-root user
+  && usermod -a -G video ${USER_NAME}
 
 # Install NVIDIA drivers in the image if NVIDIA_VERSION arg set
 RUN if [ ! -z ${NVIDIA_VERSION} ] ; then \
-        if [ "$TARGETARCH" = "arm64" ]; then TARGET=aarch64; elif [ "$TARGETARCH" = "amd64" ]; then TARGET=x86_64; else TARGET=$TARGETARCH; fi; \
-        echo "# Downloading NVIDIA drivers matching host version (${NVIDIA_VERSION})..."; \
-        curl -sSLO http://us.download.nvidia.com/XFree86/Linux-${TARGET}/${NVIDIA_VERSION}/NVIDIA-Linux-${TARGET}-${NVIDIA_VERSION}.run; \
-        chmod +x NVIDIA-Linux-${TARGET}-${NVIDIA_VERSION}.run; \
-        echo "# Installing NVIDIA drivers..."; \
-        ./NVIDIA-Linux-${TARGET}-${NVIDIA_VERSION}.run --ui=none --no-kernel-module --no-install-compat32-libs --install-libglvnd --no-questions; \
-        rm NVIDIA-Linux-${TARGET}-${NVIDIA_VERSION}.run; \
-    fi
+  if [ "$TARGETARCH" = "arm64" ]; then TARGET=aarch64; elif [ "$TARGETARCH" = "amd64" ]; then TARGET=x86_64; else TARGET=$TARGETARCH; fi; \
+  echo "# Downloading NVIDIA drivers matching host version (${NVIDIA_VERSION})..."; \
+  curl -sSLO http://us.download.nvidia.com/XFree86/Linux-${TARGET}/${NVIDIA_VERSION}/NVIDIA-Linux-${TARGET}-${NVIDIA_VERSION}.run; \
+  chmod +x NVIDIA-Linux-${TARGET}-${NVIDIA_VERSION}.run; \
+  echo "# Installing NVIDIA drivers..."; \
+  ./NVIDIA-Linux-${TARGET}-${NVIDIA_VERSION}.run --ui=none --no-kernel-module --no-install-compat32-libs --install-libglvnd --no-questions; \
+  rm NVIDIA-Linux-${TARGET}-${NVIDIA_VERSION}.run; \
+  fi
 
 # Add script to allow nvidia drivers installation on user interactive session
 ADD install-nvidia-drivers.sh /usr/bin/install-nvidia-drivers.sh
 RUN echo "# Configuring '${USER_NAME}' for NVIDIA drivers auto installation if NVIDIA_VERSION env variable is set..." \
-    #
-    # Enable runtime nvidia drivers installation
-    && chmod +x /usr/bin/install-nvidia-drivers.sh \
-    #
-    # Configure nvidia drivers installation for the non-root user
-    && printf "\n. /usr/bin/install-nvidia-drivers.sh\n" >> /home/${USER_NAME}/.bashrc 
+  #
+  # Enable runtime nvidia drivers installation
+  && chmod +x /usr/bin/install-nvidia-drivers.sh \
+  #
+  # Configure nvidia drivers installation for the non-root user
+  && printf "\n. /usr/bin/install-nvidia-drivers.sh\n" >> /home/${USER_NAME}/.bashrc 
 
 # Clean up apt
 RUN apt-get autoremove -y \
-    && apt-get clean -y \
-    && rm -rf /var/lib/apt/lists/*
+  && apt-get clean -y \
+  && rm -rf /var/lib/apt/lists/*
 
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=

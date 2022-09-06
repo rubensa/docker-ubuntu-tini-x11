@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
 
+DOCKER_IMAGE_NAME="ubuntu-tini-x11"
+
 docker rm \
-  ubuntu-tini-x11
+  "${DOCKER_IMAGE_NAME}"

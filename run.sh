@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+DOCKER_REPOSITORY_NAME="rubensa"
+DOCKER_IMAGE_NAME="ubuntu-tini-dev"
+DOCKER_IMAGE_TAG="latest"
+
 # Get current user UID
 USER_ID=$(id -u)
 # Get current user main GUID
@@ -80,7 +84,7 @@ prepare_docker_printer_host_sharing() {
 }
 
 prepare_docker_ipc_host_sharing() {
-  # Allow shared memory to avoid RAM access failures and rendering glitches due to X extesnion MIT-SHM
+  # Allow shared memory to avoid RAM access failures and rendering glitches due to X extension MIT-SHM
   EXTRA+=" --ipc=host"
 }
 
@@ -123,7 +127,7 @@ prepare_docker_hostname_host_sharing
 prepare_docker_nvidia_drivers_install
 
 docker run --rm -it \
-  --name "ubuntu-tini-x11" \
+  --name "${DOCKER_IMAGE_NAME}" \
   ${SECURITY} \
   ${ENV_VARS} \
   ${DEVICES} \
@@ -131,5 +135,4 @@ docker run --rm -it \
   ${EXTRA} \
   ${RUNNER} \
   ${RUNNER_GROUPS} \
-  rubensa/ubuntu-tini-x11
-  
+  "${DOCKER_REPOSITORY_NAME}/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}" "$@"

@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
 
-docker start -i \
-  ubuntu-tini-x11
+DOCKER_IMAGE_NAME="ubuntu-tini-x11"
+
+docker start \
+  "${DOCKER_IMAGE_NAME}"
