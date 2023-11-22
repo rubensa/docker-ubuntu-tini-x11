@@ -153,7 +153,7 @@ prepare_docker_ipc_host_sharing() {
 prepare_docker_x11_host_sharing() {
    # X11 Unix-domain socket
   MOUNTS+=" --mount type=bind,source=/tmp/.X11-unix,target=/tmp/.X11-unix"
-  ENV_VARS+=" --env=DISPLAY=unix${DISPLAY}"
+  ENV_VARS+=" --env=DISPLAY=${DISPLAY}"
   # Credentials in cookies used by xauth for authentication of X sessions
   MOUNTS+=" --mount type=bind,source=${XAUTHORITY},target=${XAUTHORITY}"
   ENV_VARS+=" --env=XAUTHORITY=${XAUTHORITY}"
