@@ -1,4 +1,4 @@
-# Docker image based on rubensa/ubuntu-tini-dev for running GUI apps
+# Docker image based on rubensa/ubuntu-tini-dev 24.04 for running GUI apps
 
 This is a Docker image based on [rubensa/ubuntu-tini-dev](https://github.com/rubensa/docker-ubuntu-tini-dev) useful for launching X11 GUI applications.
 
@@ -11,7 +11,7 @@ You can build the image like this:
 
 DOCKER_REPOSITORY_NAME="rubensa"
 DOCKER_IMAGE_NAME="ubuntu-tini-x11"
-DOCKER_IMAGE_TAG="latest"
+DOCKER_IMAGE_TAG="24.04"
 
 docker buildx build --platform=linux/amd64,linux/arm64 --no-cache \
   -t "${DOCKER_REPOSITORY_NAME}/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}" \
@@ -30,7 +30,7 @@ To make an Nvidia GPU available in the docker container, the following steps hav
 
 DOCKER_REPOSITORY_NAME="rubensa"
 DOCKER_IMAGE_NAME="ubuntu-tini-x11"
-DOCKER_IMAGE_TAG="latest"
+DOCKER_IMAGE_TAG="24.04"
 
 # NVidia propietary drivers are needed on host for this to work
 NVIDIA_VERSION=$(nvidia-smi --query-gpu=driver_version --format=csv,noheader)
@@ -64,7 +64,7 @@ You can run the container like this (change --rm with -d if you don't want the c
 
 DOCKER_REPOSITORY_NAME="rubensa"
 DOCKER_IMAGE_NAME="ubuntu-tini-x11"
-DOCKER_IMAGE_TAG="latest"
+DOCKER_IMAGE_TAG="24.04"
 
 # Get current user UID
 USER_ID=$(id -u)
